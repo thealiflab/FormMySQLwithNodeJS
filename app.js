@@ -25,11 +25,9 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err){
     if(err) throw err;
-
     console.log('Database is connect successfully...');
 });
 
-connection.end();
 
 
 app.post("/",function(req,res){
@@ -41,4 +39,24 @@ app.post("/",function(req,res){
     var gender = req.body.gender;
 
     console.log(firstName,lastName,username,email,phone,gender);
+
+
+    var sql = "insert into usersinfo values('"+firstName+"', '"+lastName+"', '"+username+"','"+email+"', '"+phone+"', '"+gender+"')"
+    connection.query(sql, function (err) {
+        if (err){
+            res.sendFile(__dirname+"/fail.html");
+            console.log(err);
+            return;
+        }
+        else{
+            res.sendFile(__dirname+"/success.html");
+        }
+      });
+    
+    //connection.end();
+
+});
+
+app.post("/failure", function(req,res){
+    res.redirect("/");
 });
